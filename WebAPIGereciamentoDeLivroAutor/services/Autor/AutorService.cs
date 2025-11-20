@@ -24,7 +24,8 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
 
         public Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idlivro)
         {
-            throw new NotImplementedException();
+            ResponseModel<List<AutorModel>> resposta = new ResponseModel<List<AutorModel>>();
+            return null;
         }
 
         public async Task<ResponseModel<List<AutorModel>>> ListarAutorores()
