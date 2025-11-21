@@ -22,10 +22,20 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
         }
 
 
-        public Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idlivro)
+        public async Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idlivro)
         {
-            ResponseModel<List<AutorModel>> resposta = new ResponseModel<List<AutorModel>>();
-            return null;
+            ResponseModel<AutorModel> resposta = new ResponseModel<AutorModel>();
+            try
+            {
+                var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == idlivro);
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = $"Erro ao buscar autor pelo id do livro: {ex.Message}";
+                resposta.Status = false; 
+                return resposta;
+            }
         }
 
         public async Task<ResponseModel<List<AutorModel>>> ListarAutorores()
