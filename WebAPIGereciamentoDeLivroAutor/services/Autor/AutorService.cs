@@ -69,7 +69,7 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
             }
         }
 
-        public Task<ResponseModel<AutorModel>> ObterAutorPorId(int id)
+        public Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int id)
         {
             throw new NotImplementedException();
         }
