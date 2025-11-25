@@ -22,12 +22,12 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
         }
 
 
-        public async Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idlivro)
+        public async Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor)
         {
             ResponseModel<AutorModel> resposta = new ResponseModel<AutorModel>();
             try
             {
-                var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == idlivro);
+                var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == idAutor);
 
                 if (autor == null)
                 {
@@ -69,9 +69,35 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
             }
         }
 
-        public Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int id)
+        public async Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int idLivro)
         {
-            throw new NotImplementedException();
+            ResponseModel<AutorModel> resposta = new ResponseModel<AutorModel>();
+            try
+            {
+                var autor = await _context.Livros
+                    .Include(a => a.Autor)
+                    .FirstOrDefaultAsync(livroBanco => livroBanco.Id == idLivro);
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = $"Registro não localizado";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                resposta.Dados = autor.Autor;
+                resposta.Mensagem = "Autor encontrado com sucesso.";
+                return resposta;
+
+
+
+            }
+            catch (Exception ex) 
+            {
+                resposta.Mensagem = $"Erro ao listar autores: {ex.Message}"; 
+                resposta.Status = false; 
+                return resposta;
+            }
         }
     }
 }

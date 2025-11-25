@@ -29,5 +29,12 @@ namespace WebAPIGereciamentoDeLivroAutor.Controllerss
             var autor = await _autorInterface.BuscarAutorPorId(IdAutor);
             return Ok(autor);
         }
+
+        [HttpGet("BuscarAutorPorIdLivro/{idlivro}")]
+        public async Task<ActionResult<ResponseModel<AutorModel>>> BuscarAutorPorIdLivro(int idlivro)
+        {
+            var autor = await _autorInterface.BuscarAutorPorIdLivro(idlivro);
+            return Ok(autor);
+        }
     }
 }
