@@ -28,8 +28,20 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
             try
             {
                 var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == idlivro);
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = "Autor não encontrado.";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                resposta.Dados = autor;
+                resposta.Mensagem = "Autor encontrado com sucesso.";
                 return resposta;
             }
+
+
             catch (Exception ex)
             {
                 resposta.Mensagem = $"Erro ao buscar autor pelo id do livro: {ex.Message}";
