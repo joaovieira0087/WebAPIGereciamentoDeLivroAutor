@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebAPIGereciamentoDeLivroAutor.Data;
 using WebAPIGereciamentoDeLivroAutor.services.Autor;
+using WebAPIGereciamentoDeLivroAutor.services.Livro;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IAutorInterface, AutorService>();
+builder.Services.AddScoped<ILivroService, LivroService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
