@@ -128,6 +128,71 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
                 return resposta;
             }
         }
+
+        public async Task<ResponseModel<List<AutorModel>>> EditarAutor(AutorEdicaoDto autorEdicaoDto)
+        {
+            ResponseModel<List<AutorModel>> resposta = new ResponseModel<List<AutorModel>>();
+
+            try
+            {
+                var autor = await
+                    _context.Autores
+                    .FirstOrDefaultAsync(x => x.Id == autorEdicaoDto.Id);
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = "Autor não encontrado.";
+                    return resposta;
+                }
+
+                autor.Nome = autorEdicaoDto.Nome;
+                autor.Sobrenome = autorEdicaoDto.Sobrenome;
+
+                _context.Update(autor);
+                await _context.SaveChangesAsync();
+                resposta.Dados = await _context.Autores.ToListAsync();
+                resposta.Mensagem = "Autor editado com sucesso.";
+
+                return resposta;
+
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = $"Erro ao listar autores: {ex.Message}";
+                resposta.Status = false;
+                return resposta;
+            }
+        }
+
+        public async Task<ResponseModel<List<AutorModel>>> ExcluirAutor(int idAutor)
+        {
+            ResponseModel<List<AutorModel>> resposta = new ResponseModel<List<AutorModel>>();
+
+            try
+            {
+                var autor = await _context.Autores.FirstOrDefaultAsync(x => x.Id == idAutor);
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = "Autor não encontrado.";
+                    return resposta;
+                }
+
+                _context.RemoveRange(autor);
+                await _context.SaveChangesAsync();
+
+                resposta.Dados = await _context.Autores.ToListAsync();
+                resposta.Mensagem = "Autor excluído com sucesso.";
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = $"Erro ao listar autores";
+                resposta.Mensagem = ex.Message;
+                resposta.Status = false;
+                return resposta;
+            }
+        }
     }
 }
 
