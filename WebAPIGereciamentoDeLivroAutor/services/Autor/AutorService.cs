@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Resources;
 using WebAPIGereciamentoDeLivroAutor.Data;
+using WebAPIGereciamentoDeLivroAutor.Dto.Autor;
 using WebAPIGereciamentoDeLivroAutor.Models;
 
 namespace WebAPIGereciamentoDeLivroAutor.services.Autor
@@ -99,5 +100,34 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
                 return resposta;
             }
         }
+
+        public async Task<ResponseModel<List<AutorModel>>> AdicionarAutor(AutorCriacaoDto autorCriacaoDto)
+        {
+            ResponseModel<List<AutorModel>> resposta = new ResponseModel<List<AutorModel>>();
+            try
+            {
+                var autor = new AutorModel()
+                {
+                    Nome = autorCriacaoDto.Nome,
+                    Sobrenome = autorCriacaoDto.Sobrenome
+                };
+
+                _context.Add(autor);
+                await _context.SaveChangesAsync();
+
+                resposta.Dados = await _context.Autores.ToListAsync();
+                resposta.Mensagem = "Autor adicionado com sucesso.";
+
+
+                return resposta;
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = $"Erro ao listar autores: {ex.Message}";
+                resposta.Status = false;
+                return resposta;
+            }
+        }
     }
 }
+

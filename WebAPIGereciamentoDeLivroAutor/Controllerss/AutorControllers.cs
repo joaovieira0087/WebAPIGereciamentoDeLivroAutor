@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebAPIGereciamentoDeLivroAutor.Dto.Autor;
 using WebAPIGereciamentoDeLivroAutor.Models;
 using WebAPIGereciamentoDeLivroAutor.services.Autor;
 
@@ -36,5 +37,13 @@ namespace WebAPIGereciamentoDeLivroAutor.Controllerss
             var autor = await _autorInterface.BuscarAutorPorIdLivro(idlivro);
             return Ok(autor);
         }
+
+        [HttpPost("CriarAutor")]
+        public async Task<ActionResult<ResponseModel<AutorModel>>> AdicionarAutor(AutorCriacaoDto autorCriacaoDto)
+        {
+            var autores = await _autorInterface.AdicionarAutor(autorCriacaoDto);
+            return Ok(autores);
+        }
+
     }
 }

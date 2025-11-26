@@ -1,4 +1,5 @@
-﻿using WebAPIGereciamentoDeLivroAutor.Models;
+﻿using WebAPIGereciamentoDeLivroAutor.Dto.Autor;
+using WebAPIGereciamentoDeLivroAutor.Models;
 
 namespace WebAPIGereciamentoDeLivroAutor.services.Autor
 {
@@ -8,6 +9,6 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
         Task<ResponseModel<List<AutorModel>>> ListarAutorores();
         Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int idlivro);
         Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor);
-        Task<ResponseModel<List<AutorModel>>> AdicionarAutor(AutorModel autor);
+        Task<ResponseModel<List<AutorModel>>> AdicionarAutor(AutorCriacaoDto autorCriacaoDto);
     }
 }
