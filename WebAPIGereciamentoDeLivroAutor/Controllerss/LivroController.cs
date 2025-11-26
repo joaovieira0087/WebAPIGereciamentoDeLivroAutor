@@ -34,11 +34,25 @@ namespace WebAPIGereciamentoDeLivroAutor.Controllerss
             return Ok(BuscarLivroPorId);
         }
 
+        [HttpGet("BuscarLivroPorIdAutor")]
+        public async Task<ActionResult<ResponseModel<AutorModel>>> BuscarLivroPorIdAutor(int livroId)
+        {
+            var BuscarLivroPorIdAutor = await _LivroInterface.BuscarLivroPorIdAutor(livroId);
+            return Ok(BuscarLivroPorIdAutor);
+        }
+
         [HttpPost("AdicionarLivro")]
         public async Task<ActionResult<ResponseModel<List<AutorModel>>>> AdiconarLivro(LivroCriacaoDto livroCriacaoDto)
         {
             var livroCriar = await _LivroInterface.AdiconarLivro(livroCriacaoDto);
             return Ok(livroCriar);
+        }
+
+        [HttpPut("EditarLivro")]
+        public async Task<ActionResult<ResponseModel<List<AutorModel>>>> EditarLivro(LivroEdicaoDto livroEdicaoDto)
+        {
+            var EditarLivro = await _LivroInterface.EditarLivro(livroEdicaoDto);
+            return Ok(EditarLivro);
         }
 
         [HttpDelete("ExcluirLivro")]

@@ -23,18 +23,27 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Livro
 
             try
             {
-                var livro = new LivroModel()
+                var autor = await _context.Autores
+                            .FirstOrDefaultAsync(a => a.Id == livroCriacaoDto.Autor.Id);
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = "Autor não encontrado";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                var livro = new LivroModel
                 {
                     Titulo = livroCriacaoDto.Titulo,
-                    Id = livroCriacaoDto.Id
+                    Autor = autor
                 };
 
                 _context.Add(livro);
                 await _context.SaveChangesAsync();
 
-                resposta.Dados = await _context.Livros.ToListAsync();
-                resposta.Mensagem = "Livro adicionado com sucesso";
-
+                resposta.Dados = await _context.Livros.Include(a => a.Autor).ToListAsync();
+                resposta.Mensagem = "Livro adicionado com sucesso.";
                 return resposta;
             }
             catch (Exception ex)
@@ -51,7 +60,9 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Livro
             ResponseModel<LivroModel> resposta = new ResponseModel<LivroModel>();
             try
             {
-                var livro = await _context.Livros.FirstOrDefaultAsync(i => i.Id == livroId);
+                var livro = await _context.Livros
+                            .Include(a => a.Autor)
+                            .FirstOrDefaultAsync(i => i.Id == livroId);
 
                 if (livro == null)
                 {
@@ -76,13 +87,84 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Livro
             }
         }
 
+        public async Task<ResponseModel<List<LivroModel>>> BuscarLivroPorIdAutor(int AutorId)
+        {
+            ResponseModel<List<LivroModel>> resposta = new ResponseModel<List<LivroModel>>();
+
+            var livro = await _context.Livros
+                        .Include(a => a.Autor)
+                        .Where(livro => livro.Autor.Id == AutorId)
+                        .ToListAsync();
+
+
+            if (livro == null)
+            {
+                resposta.Mensagem = $"Registro não localizado";
+                resposta.Status = false;
+                return resposta;
+            }
+
+            resposta.Dados = livro;
+            resposta.Mensagem = "livros encontrado com sucesso.";
+            return resposta;
+
+
+
+        }
+
+        public async Task<ResponseModel<List<LivroModel>>> EditarLivro(LivroEdicaoDto livroEdicaoDto)
+        {
+            ResponseModel<List<LivroModel>> resposta = new ResponseModel<List<LivroModel>>();
+            try
+            {
+                var livro = await _context.Livros
+                            .Include(a => a.Autor)
+                            .FirstOrDefaultAsync(x => x.Id == livroEdicaoDto.Id);
+
+                var autor = await _context.Autores
+                            .FirstOrDefaultAsync(a => a.Id == livroEdicaoDto.Autor.Id);
+
+                if (livro == null)
+                {
+                    resposta.Mensagem = "Livro não encontrado";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                if (autor == null)
+                {
+                    resposta.Mensagem = "Autor não encontrado";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                livro.Titulo = livroEdicaoDto.Titulo;
+                livro.Autor = autor;
+
+                _context.Update(livro);
+                await _context.SaveChangesAsync();
+
+                resposta.Dados = await _context.Livros.ToListAsync();
+                resposta.Mensagem = "Livro editado com sucesso.";
+
+                return resposta;
+
+            }
+            catch (Exception ex)
+            {
+                resposta.Mensagem = $"Erro ao listar autores: {ex.Message}";
+                resposta.Status = false;
+                return resposta;
+            }
+        }
+
         public async Task<ResponseModel<List<LivroModel>>> ExcluirLivro(int idlivro)
         {
             ResponseModel<List<LivroModel>> resposta = new ResponseModel<List<LivroModel>>();
 
             try
             {
-                var livro = _context.Livros.FirstOrDefault(x => x.Id == idlivro);
+                var livro = _context.Livros.Include(a => a.Autor).FirstOrDefault(x => x.Id == idlivro);
 
                 if (livro == null)
                 {
@@ -113,7 +195,7 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Livro
 
             try
             {
-                var livro = await _context.Livros.ToListAsync();
+                var livro = await _context.Livros.Include(a => a.Autor).ToListAsync();
                 resposta.Dados = livro;
 
                 if (livro == null || livro.Count == 0)
