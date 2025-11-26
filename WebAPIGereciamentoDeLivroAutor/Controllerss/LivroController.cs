@@ -27,6 +27,13 @@ namespace WebAPIGereciamentoDeLivroAutor.Controllerss
             return Ok(livros);
         }
 
+        [HttpGet("BuscarLivroPorId")]
+        public async Task<ActionResult<ResponseModel<AutorModel>>> BuscarLivroPorId(int livroId)
+        {
+            var BuscarLivroPorId = await _LivroInterface.BuscarLivroPorId(livroId);
+            return Ok(BuscarLivroPorId);
+        }
+
         [HttpPost("AdicionarLivro")]
         public async Task<ActionResult<ResponseModel<List<AutorModel>>>> AdiconarLivro(LivroCriacaoDto livroCriacaoDto)
         {

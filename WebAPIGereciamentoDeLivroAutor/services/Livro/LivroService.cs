@@ -46,6 +46,36 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Livro
             }
         }
 
+        public async Task<ResponseModel<LivroModel>> BuscarLivroPorId(int livroId)
+        {
+            ResponseModel<LivroModel> resposta = new ResponseModel<LivroModel>();
+            try
+            {
+                var livro = await _context.Livros.FirstOrDefaultAsync(i => i.Id == livroId);
+
+                if (livro == null)
+                {
+                    resposta.Mensagem = "Livro não encontrado";
+                    resposta.Status = false;
+                    return resposta;
+                }
+
+                resposta.Dados = livro;
+                resposta.Mensagem = "Livro encontrado com sucesso";
+                return resposta;
+
+
+            }
+
+            catch (Exception ex)
+            {
+                resposta.Mensagem = ex.Message;
+                resposta.Mensagem = "erro ao listar livros";
+                resposta.Status = false;
+                return resposta;
+            }
+        }
+
         public async Task<ResponseModel<List<LivroModel>>> ExcluirLivro(int idlivro)
         {
             ResponseModel<List<LivroModel>> resposta = new ResponseModel<List<LivroModel>>();
