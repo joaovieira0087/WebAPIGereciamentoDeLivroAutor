@@ -8,5 +8,6 @@ namespace WebAPIGereciamentoDeLivroAutor.services.Autor
         Task<ResponseModel<List<AutorModel>>> ListarAutorores();
         Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int idlivro);
         Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor);
+        Task<ResponseModel<List<AutorModel>>> AdicionarAutor(AutorModel autor);
     }
 }
